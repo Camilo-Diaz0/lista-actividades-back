@@ -20,6 +20,14 @@ public class Usuarios{
         this.apellido = apellido;
         this.correo = correo;
         this.password = password;
+        roles = "ROlE_USER";
+    }
+    public Usuarios(String username,String apellido,String correo, String password, String roles){
+        this.username = username;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {

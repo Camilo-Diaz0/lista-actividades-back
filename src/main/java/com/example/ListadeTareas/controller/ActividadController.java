@@ -2,10 +2,8 @@ package com.example.ListadeTareas.controller;
 
 import com.example.ListadeTareas.entities.Actividades;
 import com.example.ListadeTareas.repository.ActividadRepository;
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
