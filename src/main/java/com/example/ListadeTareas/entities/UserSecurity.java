@@ -9,14 +9,14 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class UserSecurity implements UserDetails {
-    private User user;
-    public UserSecurity() {
-        super();
+    private Usuarios user;
+    public UserSecurity(Usuarios user) {
+        this.user = user;
     }
 
     @Override
     public String getUsername() {
-        return user.getNombre();
+        return user.getUsername();
     }
 
     @Override
@@ -26,7 +26,8 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(user.getRoles()
+        return Arrays.stream(user
+                .getRoles()
                 .split(","))
                 .map(SimpleGrantedAuthority::new)
                 .toList();
