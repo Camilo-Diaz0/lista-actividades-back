@@ -3,8 +3,6 @@ package com.example.ListadeTareas.entities;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -14,10 +12,10 @@ public class UserSecurity implements UserDetails {
     private String username;
     private  String password;
     private List<GrantedAuthority> authorities;
-    public UserSecurity(Usuarios user) {
-        username = user.getUsername();
-        password = user.getPassword();
-        authorities =Arrays.stream(user
+    public UserSecurity(Usuarios usuarios) {
+        username = usuarios.getUsername();
+        password = usuarios.getPassword();
+        authorities =Arrays.stream(usuarios
                         .getRoles()
                         .split(","))
                 .map(SimpleGrantedAuthority::new)

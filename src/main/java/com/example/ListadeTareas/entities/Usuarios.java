@@ -14,14 +14,15 @@ public class Usuarios{
     private String correo;
     private String password;
     private String roles;
+
     private Usuarios(){}
-    public Usuarios(String username,String apellido,String correo, String password){
+    /*public Usuarios(String username,String apellido,String correo, String password){
         this.username = username;
         this.apellido = apellido;
         this.correo = correo;
         this.password = password;
         roles = "ROlE_USER";
-    }
+    }*/
     public Usuarios(String username,String apellido,String correo, String password, String roles){
         this.username = username;
         this.apellido = apellido;

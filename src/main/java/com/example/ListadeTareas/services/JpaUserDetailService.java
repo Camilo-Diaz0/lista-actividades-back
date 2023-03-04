@@ -2,7 +2,7 @@ package com.example.ListadeTareas.services;
 
 import com.example.ListadeTareas.entities.UserSecurity;
 import com.example.ListadeTareas.entities.Usuarios;
-import com.example.ListadeTareas.repository.UserRepository;
+import com.example.ListadeTareas.repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Component
 public class JpaUserDetailService implements UserDetailsService {
     @Autowired
-    private UserRepository userRepository;
+    private UsuariosRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
