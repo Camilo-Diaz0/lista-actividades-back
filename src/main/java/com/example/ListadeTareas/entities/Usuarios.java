@@ -1,9 +1,10 @@
 package com.example.ListadeTareas.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Usuarios{
     @Id
@@ -15,20 +16,25 @@ public class Usuarios{
     private String password;
     private String roles;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Actividades> actividades;
+
     private Usuarios(){}
-    /*public Usuarios(String username,String apellido,String correo, String password){
-        this.username = username;
-        this.apellido = apellido;
-        this.correo = correo;
-        this.password = password;
-        roles = "ROlE_USER";
-    }*/
-    public Usuarios(String username,String apellido,String correo, String password, String roles){
+    public Usuarios(String username,String apellido,String correo, String password, String roles, ArrayList<Actividades> actividades){
         this.username = username;
         this.apellido = apellido;
         this.correo = correo;
         this.password = password;
         this.roles = roles;
+        this.actividades = actividades;
+    }
+
+    public List<Actividades> getActividades() {
+        return actividades;
+    }
+
+    public void setActividades(List<Actividades> actividades) {
+        this.actividades = actividades;
     }
 
     public Long getId() {
@@ -71,5 +77,17 @@ public class Usuarios{
     }
     public void setRoles(String roles){
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuarios{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", correo='" + correo + '\'' +
+                ", password='" + password + '\'' +
+                ", roles='" + roles + '\'' +
+                '}';
     }
 }

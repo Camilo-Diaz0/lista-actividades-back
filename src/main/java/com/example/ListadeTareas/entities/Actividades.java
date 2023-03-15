@@ -1,9 +1,7 @@
 package com.example.ListadeTareas.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 @Entity
 public class Actividades {
     @Id
@@ -13,11 +11,16 @@ public class Actividades {
     private String actividad;
     private String hora;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario" )
+    private Usuarios usuario;
+
     private Actividades(){}
-    public Actividades(String actividad, String hora, boolean realizado){
+    public Actividades(String actividad, String hora, boolean realizado, Usuarios usuario){
         this.actividad = actividad;
         this.hora = hora;
         this.realizado = realizado;
+        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -46,5 +49,23 @@ public class Actividades {
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    public Usuarios getUsuario() {
+        return usuario;
+    }
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Actividades{" +
+                "id=" + id +
+                ", realizado=" + realizado +
+                ", actividad='" + actividad + '\'' +
+                ", hora='" + hora + '\'' +
+                ", usuario=" + usuario +
+                '}';
     }
 }

@@ -3,6 +3,7 @@ package com.example.ListadeTareas.security;
 import com.example.ListadeTareas.services.JpaUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,11 +24,11 @@ public class WebSecurity{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf().disable()
-                .authorizeHttpRequests().requestMatchers("/usuarios/crear").permitAll()
+                .authorizeHttpRequests().requestMatchers("/usuarios/crear","/api/**").permitAll()
                 .and()
                 .authorizeHttpRequests()
-//                .requestMatchers("/api/**")
-                .anyRequest()
+                .requestMatchers(HttpMethod.GET,"/api/actividades")
+//                .anyRequest()
                 .authenticated()
                 .and().formLogin()
                 .and().build();

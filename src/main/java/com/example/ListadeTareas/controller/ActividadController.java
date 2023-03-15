@@ -7,15 +7,19 @@ import com.example.ListadeTareas.repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
 @RestController
 public class ActividadController {
+
+    @Autowired
+    private UsuariosRepository usuariosRepository;
     private ActividadRepository actividadRepository;
 
     public ActividadController(ActividadRepository actividadRepository){
@@ -24,7 +28,11 @@ public class ActividadController {
     @GetMapping("/api/actividades")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<Actividades>> obtener(){
-        List<Actividades> listActividades = actividadRepository.findAll();
+        String username =SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(username);
+        Usuarios usuarios = usuariosRepository.findByUsername(username).get();
+        List<Actividades> listActividades = usuarios.getActividades();
+        System.out.println("probando");
         if(listActividades.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -40,7 +48,7 @@ public class ActividadController {
         return ResponseEntity.notFound().build();
     }
     @PostMapping("/api/crear")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Actividades> crear(@RequestBody Actividades actividades){
         if(actividades.getId() != null){
             return ResponseEntity.badRequest().build();

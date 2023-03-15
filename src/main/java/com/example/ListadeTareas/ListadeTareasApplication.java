@@ -12,6 +12,6 @@ public class ListadeTareasApplication {
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(ListadeTareasApplication.class, args);
 		UsuariosRepository repository = context.getBean(UsuariosRepository.class);
-		repository.save(new Usuarios("camilo","diaz","camilo0@hotmail.com","password","ROLE_USER"));
+//		repository.save(new Usuarios("camilo","diaz","camilo0@hotmail.com","password","ROLE_USER"));
 	}
 }
