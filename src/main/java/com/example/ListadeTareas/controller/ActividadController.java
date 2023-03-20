@@ -10,7 +10,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -30,12 +32,17 @@ public class ActividadController {
         String username =SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println(username);
         Usuarios usuarios = usuariosRepository.findByUsername(username).get();
-        List<Actividades> listActividades = usuarios.getActividades();
-        System.out.println("probando");
-        if(listActividades.isEmpty()){
+        Long id = usuarios.getId();
+        List<Actividades> lista = new ArrayList<>();
+        for(Actividades actual : actividadRepository.findAll()){
+            if(Objects.equals(actual.getId(), id)){
+                lista.add(actual);
+            }
+        }
+        if(lista.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(listActividades);
+        return ResponseEntity.ok(lista);
     }
     @GetMapping("/api/actividades/{id}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -52,9 +59,14 @@ public class ActividadController {
         if(actividades.getId() != null){
             return ResponseEntity.badRequest().build();
         }
-        Actividades nuevo = actividadRepository.save(actividades);
+        String username = actividades.getUsuario().getUsername();
+        Usuarios usuarios = usuariosRepository.findByUsername(username).get();
+        actividades.setUsuario(usuarios);
+        actividadRepository.save(actividades);
         String sId = String.valueOf(actividades.getId());
-        return ResponseEntity.created(URI.create("/api/actividades/"+ sId)).body(nuevo);
+        System.out.println(sId);
+//        return ResponseEntity.created(URI.create("/api/actividades/"+ sId)).body(actividades);
+        return ResponseEntity.ok().build();
     }
     @DeleteMapping("/api/actividades/{id}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
