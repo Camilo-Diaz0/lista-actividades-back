@@ -28,17 +28,24 @@ public class ActividadController {
     }
     @GetMapping("/api/actividades")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<List<Actividades>> obtener(){
+    public ResponseEntity<ArrayList<Actividades>> obtener(){
         String username =SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("nooooooooooooooooooo ssseeeeeeeeeeeeeeeeeeeeeeeeee");
         System.out.println(username);
         Usuarios usuarios = usuariosRepository.findByUsername(username).get();
         Long id = usuarios.getId();
-        List<Actividades> lista = new ArrayList<>();
-        for(Actividades actual : actividadRepository.findAll()){
-            if(Objects.equals(actual.getId(), id)){
-                lista.add(actual);
+        ArrayList<Actividades> lista = new ArrayList<>();
+        List<Actividades> actividades = actividadRepository.findAll();
+        System.out.println(actividades.size());
+        for(Actividades actual : actividades){
+            if(Objects.equals(actual.getUsuario().getId(), id)){
+               Actividades actividadTemp = new Actividades(actual.getActividad(),actual.getHora(),actual.isRealizado(),null);
+                lista.add(actividadTemp);
+                System.out.println(actual);
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             }
         }
+        System.out.println("pppppppppppppppppppppppppppppppppppppppppppppppp");
         if(lista.isEmpty()){
             return ResponseEntity.notFound().build();
         }
