@@ -1,10 +1,11 @@
 package com.example.ListadeTareas.controller;
 
 import com.example.ListadeTareas.dto.AuthRequest;
-import com.example.ListadeTareas.entities.Actividades;
 import com.example.ListadeTareas.entities.Usuarios;
 import com.example.ListadeTareas.repository.UsuariosRepository;
+import com.example.ListadeTareas.services.ActividadesServices;
 import com.example.ListadeTareas.services.JwtService;
+import com.example.ListadeTareas.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,35 +21,28 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuariosController {
+
     @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private UsuariosRepository repository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private UsuarioService usuarioService;
+
 
     @PostMapping("/crear")
     public ResponseEntity<Usuarios> registrar(@RequestBody Usuarios usuarios){
         if(usuarios.getId() != null){
             return ResponseEntity.badRequest().build();
         }
-        System.out.println(usuarios);
-        usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
-        usuarios.setActividades(new ArrayList<>());
-        System.out.println(usuarios);
-        repository.save(usuarios);
+        usuarioService.registrar(usuarios);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/autenticar")
-    public String autenticarObtenerToken(@RequestBody AuthRequest authRequest){
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        if(authenticate.isAuthenticated()){
-            return jwtService.generarToken(authRequest.getUsername());
+    public ResponseEntity<String> autenticarObtenerToken(@RequestBody AuthRequest authRequest){
+        try{
+            String jwtToken = usuarioService.crearToken(authRequest);
+            return ResponseEntity.ok(jwtToken);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return "no registrado";
     }
 }
 
