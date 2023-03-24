@@ -19,8 +19,17 @@ public class Usuarios{
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Actividades> actividades;
 
-    private Usuarios(){}
+    public Usuarios(){}
     public Usuarios(String username,String apellido,String correo, String password, String roles, ArrayList<Actividades> actividades){
+        this.username = username;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.password = password;
+        this.roles = roles;
+        this.actividades = actividades;
+    }
+    public Usuarios(Long id,String username,String apellido,String correo, String password, String roles, ArrayList<Actividades> actividades){
+        this.id = id;
         this.username = username;
         this.apellido = apellido;
         this.correo = correo;

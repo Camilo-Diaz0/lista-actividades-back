@@ -12,11 +12,18 @@ public class Actividades {
     private String hora;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario" )
+    @JoinColumn(name = "id_usuario")
     private Usuarios usuario;
 
-    private Actividades(){}
+    public Actividades(){}
     public Actividades(String actividad, String hora, boolean realizado, Usuarios usuario){
+        this.actividad = actividad;
+        this.hora = hora;
+        this.realizado = realizado;
+        this.usuario = usuario;
+    }
+    public Actividades(Long id,String actividad, String hora, boolean realizado, Usuarios usuario){
+        this.id = id;
         this.actividad = actividad;
         this.hora = hora;
         this.realizado = realizado;

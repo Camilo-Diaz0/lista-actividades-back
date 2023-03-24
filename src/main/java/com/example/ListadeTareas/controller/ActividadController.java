@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,36 +34,20 @@ public class ActividadController {
         System.out.println("nooooooooooooooooooo ssseeeeeeeeeeeeeeeeeeeeeeeeee");
         System.out.println(username);
         Usuarios usuarios = usuariosRepository.findByUsername(username).get();
-        Long id = usuarios.getId();
         ArrayList<Actividades> lista = new ArrayList<>();
-        List<Actividades> actividades = actividadRepository.findAll();
-        System.out.println(actividades.size());
-        for(Actividades actual : actividades){
-            if(Objects.equals(actual.getUsuario().getId(), id)){
-               Actividades actividadTemp = new Actividades(actual.getActividad(),actual.getHora(),actual.isRealizado(),null);
-                lista.add(actividadTemp);
-                System.out.println(actual);
-                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            }
+        for(Actividades actual : usuarios.getActividades()){
+            Actividades actividaTemp = new Actividades(actual.getId(),actual.getActividad(),actual.getHora(),actual.isRealizado(),null);
+            lista.add(actividaTemp);
         }
-        System.out.println("pppppppppppppppppppppppppppppppppppppppppppppppp");
         if(lista.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(lista);
     }
-    @GetMapping("/api/actividades/{id}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Actividades> obtenerByID(@PathVariable Long id){
-        Optional<Actividades> actividaOpt = actividadRepository.findById(id);
-        if (actividaOpt.isPresent()){
-            return ResponseEntity.ok(actividaOpt.get());
-        }
-        return ResponseEntity.notFound().build();
-    }
+
     @PostMapping("/api/crear")
-//    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Actividades> crear(@RequestBody Actividades actividades){
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Actividades> crear(@RequestBody Actividades actividades) throws URISyntaxException {
         if(actividades.getId() != null){
             return ResponseEntity.badRequest().build();
         }
@@ -70,16 +55,24 @@ public class ActividadController {
         Usuarios usuarios = usuariosRepository.findByUsername(username).get();
         actividades.setUsuario(usuarios);
         actividadRepository.save(actividades);
-        String sId = String.valueOf(actividades.getId());
-        System.out.println(sId);
-//        return ResponseEntity.created(URI.create("/api/actividades/"+ sId)).body(actividades);
-        return ResponseEntity.ok().build();
+        System.out.println("acaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        for(Actividades actual : actividadRepository.findAll()){
+            if(actual.getActividad() == actividades.getActividad() && actual.getUsuario() == actividades.getUsuario()){
+                System.out.println("aaaaaaaaaaqqqqqqqqqquiiiiiiiiiiiiiii");
+                actividades = actual;
+                System.out.println(actividades);
+                actividades.setUsuario(null);
+                System.out.println(actividades);
+            }
+        }
+        return ResponseEntity.created(new URI("/api/actividades")).body(actividades);
     }
     @DeleteMapping("/api/actividades/{id}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Actividades> eliminarById(@PathVariable Long id){
-        Optional<Actividades> actividaOpt = actividadRepository.findById(id);
-        if (actividaOpt.isPresent()){
+        Optional<Actividades> actividadOpt = actividadRepository.findById(id);
+        if(actividadOpt.isPresent()){
+            Actividades actividades = actividadOpt.get();
             actividadRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
@@ -93,13 +86,23 @@ public class ActividadController {
         }else if(!actividadRepository.existsById(actividades.getId())){
             return ResponseEntity.notFound().build();
         }
-        Actividades result = actividadRepository.save(actividades);
-        return ResponseEntity.ok(result);
+        Actividades actividadBD = actividadRepository.findById(actividades.getId()).get();
+        actividadBD.setActividad(actividades.getActividad());
+        actividadBD.setHora(actividades.getHora());
+        actividadBD.setRealizado(actividades.isRealizado());
+        actividadRepository.save(actividadBD);
+        actividadBD.setUsuario(null);
+        return ResponseEntity.ok(actividadBD);
     }
     @DeleteMapping("/api/actividades")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Actividades> borrarTodo(){
-        actividadRepository.deleteAll();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        for(Actividades actual : actividadRepository.findAll()){
+            if (Objects.equals(actual.getUsuario().getUsername(), username)){
+                actividadRepository.delete(actual);
+            }
+        }
         return ResponseEntity.ok().build();
     }
 }
