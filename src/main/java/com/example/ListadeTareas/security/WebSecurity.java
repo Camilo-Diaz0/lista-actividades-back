@@ -5,6 +5,7 @@ import com.example.ListadeTareas.services.JpaUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -33,6 +34,7 @@ public class WebSecurity{
         return http
                 .csrf().disable()
                 .authorizeHttpRequests().requestMatchers("/usuarios/**").permitAll()
+                .and().authorizeHttpRequests().requestMatchers(HttpMethod.GET,"/api/pruebas").permitAll()
                 .and()
                 .authorizeHttpRequests()
 //                .requestMatchers("/api/actividades")

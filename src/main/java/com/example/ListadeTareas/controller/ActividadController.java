@@ -12,11 +12,17 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins = "*")
 public class ActividadController {
 
     @Autowired
     private ActividadesServices actividadesServices;
     public ActividadController(){}
+
+    @GetMapping("/api/pruebas")
+    public String pruebita(){
+        return "que pasa puto";
+    }
 
     @GetMapping("/api/actividades")
     @PreAuthorize("hasAuthority('ROLE_USER')")
