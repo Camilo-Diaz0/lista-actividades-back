@@ -5,13 +5,11 @@ import com.example.ListadeTareas.entities.Usuarios;
 import com.example.ListadeTareas.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuarios")
+@CrossOrigin(origins = "*")
 public class UsuariosController {
 
     @Autowired
@@ -23,8 +21,12 @@ public class UsuariosController {
         if(usuarios.getId() != null){
             return ResponseEntity.badRequest().build();
         }
-        usuarioService.registrar(usuarios);
-        return ResponseEntity.ok().build();
+        try{
+            usuarioService.registrar(usuarios);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping("/autenticar")

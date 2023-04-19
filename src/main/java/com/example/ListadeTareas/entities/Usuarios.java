@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(name = "unico_nombre",columnNames = ("username")))
 public class Usuarios{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String username;
-    private String apellido;
+    private int edad;
     private String correo;
     private String password;
     private String roles;
@@ -20,18 +22,18 @@ public class Usuarios{
     private List<Actividades> actividades;
 
     public Usuarios(){}
-    public Usuarios(String username,String apellido,String correo, String password, String roles, ArrayList<Actividades> actividades){
+    public Usuarios(String username,int edad,String correo, String password, String roles, ArrayList<Actividades> actividades){
         this.username = username;
-        this.apellido = apellido;
+        this.edad = edad;
         this.correo = correo;
         this.password = password;
         this.roles = roles;
         this.actividades = actividades;
     }
-    public Usuarios(Long id,String username,String apellido,String correo, String password, String roles, ArrayList<Actividades> actividades){
+    public Usuarios(Long id,String username,int edad,String correo, String password, String roles, ArrayList<Actividades> actividades){
         this.id = id;
         this.username = username;
-        this.apellido = apellido;
+        this.edad = edad;
         this.correo = correo;
         this.password = password;
         this.roles = roles;
@@ -58,12 +60,12 @@ public class Usuarios{
         this.username = nombre;
     }
 
-    public String getApellido() {
-        return apellido;
+    public int getEdad() {
+        return edad;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public void setEdad(int edad) {
+        this.edad = edad;
     }
 
     public String getCorreo() {
@@ -93,7 +95,7 @@ public class Usuarios{
         return "Usuarios{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", apellido='" + apellido + '\'' +
+                ", edad='" + edad + '\'' +
                 ", correo='" + correo + '\'' +
                 ", password='" + password + '\'' +
                 ", roles='" + roles + '\'' +
