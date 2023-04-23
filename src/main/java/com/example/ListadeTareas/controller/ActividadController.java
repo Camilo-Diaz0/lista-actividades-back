@@ -12,7 +12,6 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = "*")
 public class ActividadController {
 
     @Autowired
@@ -25,7 +24,6 @@ public class ActividadController {
     }
 
     @GetMapping("/api/actividades")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<Actividades>> obtener(){
         List<Actividades> lista = actividadesServices.listaActividades();
         if(lista.isEmpty()){
