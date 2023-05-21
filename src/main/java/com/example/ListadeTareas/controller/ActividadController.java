@@ -32,7 +32,7 @@ public class ActividadController {
         return ResponseEntity.ok(lista);
     }
 
-    @PostMapping("/api/crear")
+    @PostMapping("/api/actividades")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Actividades> crear(@RequestBody Actividades actividades) throws URISyntaxException {
         if(actividades.getId() != null){
