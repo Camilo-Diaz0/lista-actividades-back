@@ -18,11 +18,6 @@ public class ActividadController {
     private ActividadesServices actividadesServices;
     public ActividadController(){}
 
-    @GetMapping("/api/pruebas")
-    public String pruebita(){
-        return "que pasa puto";
-    }
-
     @GetMapping("/api/actividades")
     public ResponseEntity<List<Actividades>> obtener(){
         List<Actividades> lista = actividadesServices.listaActividades();

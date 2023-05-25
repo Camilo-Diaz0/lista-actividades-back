@@ -39,10 +39,8 @@ public class WebSecurity{
         return http
                 .csrf().disable()
                 .authorizeHttpRequests().requestMatchers("/usuarios/**").permitAll()
-                .and().authorizeHttpRequests().requestMatchers(HttpMethod.GET,"/api/pruebas").permitAll()
                 .and()
                 .authorizeHttpRequests()
-//                .requestMatchers("/api/actividades")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -87,7 +85,7 @@ public class WebSecurity{
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")
+                        .allowedOrigins("https://camilo-diaz0.github.io/lista-actividades-front/")
                         .allowedMethods("*")
                         .allowedHeaders("*");
             }

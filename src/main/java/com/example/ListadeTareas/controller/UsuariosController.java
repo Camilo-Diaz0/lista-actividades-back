@@ -14,7 +14,6 @@ public class UsuariosController {
     @Autowired
     private UsuarioService usuarioService;
 
-
     @PostMapping("/crear")
     public ResponseEntity<Usuarios> registrar(@RequestBody Usuarios usuarios){
         if(usuarios.getId() != null){
